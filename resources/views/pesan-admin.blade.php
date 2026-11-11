@@ -349,6 +349,8 @@
         font-size: 0.9375rem;
         line-height: 1.45;
         word-wrap: break-word;
+        white-space: pre-wrap; /* Tampilkan baris baru dari pesan multiline */
+        overflow-wrap: anywhere;
         box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
         position: relative;
         animation: fadeIn 0.15s ease;
@@ -639,7 +641,7 @@
                         d="M1.998 21.5h19.999c1.104 0 2-.896 2-2V4.5c0-1.104-.896-2-2-2H1.998c-1.104 0-2 .896-2 2v15c0 1.104.896 2 2 2zm2-16h16v13h-16v-13zm11.5 8.5l-3.5 4.5-2.5-3-3.5 4.5h14l-4.5-6z" />
                 </svg>
             </button>
-            <textarea id="chat-input" placeholder="Ketik balasan..." autocomplete="off" rows="1"></textarea>
+            <textarea id="chat-input" placeholder="Ketik balasan... (Shift+Enter untuk baris baru)" title="Enter = kirim, Shift+Enter = baris baru" autocomplete="off" rows="1"></textarea>
             <button id="send-button" title="Kirim Pesan">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                     <path
@@ -1002,12 +1004,24 @@
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // Handle keydown on textarea
+    // Handle keydown on textarea:
+    // Enter kirim pesan, Shift+Enter (atau Ctrl+Enter) turun baris
     input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key !== 'Enter') return;
+
+        if (e.shiftKey || e.ctrlKey) {
+            // Biarkan newline tersisip, lalu sesuaikan tinggi kotak
             e.preventDefault();
-            sendMessage();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.slice(0, start) + '\n' + this.value.slice(end);
+            this.selectionStart = this.selectionEnd = start + 1;
+            this.dispatchEvent(new Event('input'));
+            return;
         }
+
+        e.preventDefault();
+        sendMessage();
     });
 
     document.getElementById('back-button').addEventListener('click', () => {

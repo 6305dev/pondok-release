@@ -31,7 +31,7 @@
                     <polyline points="21 15 16 10 5 21" />
                 </svg>
             </button>
-            <textarea id="input" placeholder="Ketik pesan..." autocomplete="off" rows="1"></textarea>
+            <textarea id="input" placeholder="Ketik pesan... (Shift+Enter untuk baris baru)" title="Enter = kirim, Shift+Enter = baris baru" autocomplete="off" rows="1"></textarea>
             <button type="submit" class="btn-send" aria-label="Kirim" title="Kirim Pesan">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
@@ -570,13 +570,25 @@
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // Handle keydown on textarea
+    // Handle keydown on textarea:
+    // Enter kirim pesan, Shift+Enter (atau Ctrl+Enter) turun baris
     input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key !== 'Enter') return;
+
+        if (e.shiftKey || e.ctrlKey) {
+            // Biarkan newline tersisip, lalu sesuaikan tinggi kotak
             e.preventDefault();
-            const btnSend = document.querySelector('.btn-send');
-            if (btnSend) btnSend.click();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.slice(0, start) + '\n' + this.value.slice(end);
+            this.selectionStart = this.selectionEnd = start + 1;
+            this.dispatchEvent(new Event('input'));
+            return;
         }
+
+        e.preventDefault();
+        const btnSend = document.querySelector('.btn-send');
+        if (btnSend) btnSend.click();
     });
 
     let lastDisplayedDate = null; // Untuk melacak tanggal terakhir yang ditampilkan

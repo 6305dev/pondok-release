@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin - Pondok')</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('icon/logo4_192.png') }}?v=5">
 
@@ -18,10 +19,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    
+
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Tailwind CSS (build statis, sebelumnya CDN runtime) -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=1">
 
@@ -43,7 +44,7 @@
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .card-header {
             background-color: transparent !important;
             border-bottom: 1px solid #e2e8f0 !important;
@@ -82,7 +83,9 @@
             border-color: #2563eb !important;
             color: #ffffff !important;
         }
-        .btn-primary:hover, .btn-primary:focus {
+
+        .btn-primary:hover,
+        .btn-primary:focus {
             background-color: #1d4ed8 !important;
             border-color: #1d4ed8 !important;
         }
@@ -92,6 +95,7 @@
             border-color: #64748b !important;
             color: #ffffff !important;
         }
+
         .btn-secondary:hover {
             background-color: #475569 !important;
             border-color: #475569 !important;
@@ -102,6 +106,7 @@
             border-color: #10b981 !important;
             color: #ffffff !important;
         }
+
         .btn-success:hover {
             background-color: #059669 !important;
             border-color: #059669 !important;
@@ -112,6 +117,7 @@
             border-color: #ef4444 !important;
             color: #ffffff !important;
         }
+
         .btn-danger:hover {
             background-color: #dc2626 !important;
             border-color: #dc2626 !important;
@@ -122,6 +128,7 @@
             border-color: #06b6d4 !important;
             color: #ffffff !important;
         }
+
         .btn-info:hover {
             background-color: #0891b2 !important;
             border-color: #0891b2 !important;
@@ -132,13 +139,15 @@
             border-color: #f59e0b !important;
             color: #ffffff !important;
         }
+
         .btn-warning:hover {
             background-color: #d97706 !important;
             border-color: #d97706 !important;
         }
 
         /* Modernize Form Controls */
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             width: 100% !important;
             border-radius: 10px !important;
             border: 1px solid #cbd5e1 !important;
@@ -170,7 +179,8 @@
             padding-bottom: 0.375rem !important;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             outline: none !important;
             border-color: #3b82f6 !important;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
@@ -184,7 +194,7 @@
             font-size: 0.75rem !important;
             text-transform: capitalize !important;
         }
-        
+
         .badge-warning {
             background-color: #fef3c7 !important;
             color: #d97706 !important;
@@ -247,13 +257,13 @@
             font-size: 0.875rem !important;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
         }
-        
+
         .alert-warning {
             background-color: #fffbeb !important;
             color: #92400e !important;
             border-left: 4px solid #f59e0b !important;
         }
-        
+
         .alert-success {
             background-color: #ecfdf5 !important;
             color: #065f46 !important;
@@ -271,18 +281,25 @@
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 3px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
         /* Overrides for H1 inside top navbar header */
-        .top-nav-header h1, .top-nav-header h2, .top-nav-header h3, .top-nav-header h4 {
+        .top-nav-header h1,
+        .top-nav-header h2,
+        .top-nav-header h3,
+        .top-nav-header h4 {
             font-size: 1.125rem !important;
             font-weight: 600 !important;
             margin: 0 !important;
@@ -290,11 +307,15 @@
             color: #0f172a !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
         }
+
         /* Remove underline on sidebar hover links */
-        aside a, aside button {
+        aside a,
+        aside button {
             text-decoration: none !important;
         }
-        aside a:hover, aside button:hover {
+
+        aside a:hover,
+        aside button:hover {
             text-decoration: none !important;
             text-decoration-line: none !important;
         }
@@ -304,7 +325,7 @@
             gap: 4px !important;
             margin-bottom: 0 !important;
         }
-        
+
         .page-item .page-link {
             border-radius: 8px !important;
             padding: 0.5rem 0.85rem !important;
@@ -342,6 +363,7 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none !important;
         }
+
         .no-scrollbar {
             -ms-overflow-style: none !important;
             scrollbar-width: none !important;
@@ -361,8 +383,10 @@
             gap: 1rem !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
         }
+
         /* Style the action buttons inside content header */
-        .content-header-container h1 a.btn, .content-header-container h1 button.btn {
+        .content-header-container h1 a.btn,
+        .content-header-container h1 button.btn {
             font-size: 0.875rem !important;
             padding: 0.6rem 1.2rem !important;
             border-radius: 10px !important;
@@ -381,7 +405,8 @@
             margin-right: -6px !important;
             margin-left: -6px !important;
         }
-        .row-tight > [class*="col-"] {
+
+        .row-tight>[class*="col-"] {
             padding-right: 6px !important;
             padding-left: 6px !important;
         }
@@ -423,27 +448,29 @@
             background-color: var(--sidebar-green-bg) !important;
             border-right: 1px solid var(--sidebar-green-border) !important;
         }
-        
+
         /* Mobile Sidebar Background overrides */
         aside.bg-slate-900.md\:hidden {
             background-color: var(--sidebar-green-bg) !important;
         }
-        
+
         /* Sidebar Branding and Footer bg */
         aside .bg-slate-950\/50 {
             background-color: var(--sidebar-green-header) !important;
             border-bottom: 1px solid var(--sidebar-green-border) !important;
         }
+
         aside .bg-slate-950\/20 {
             background-color: var(--sidebar-green-header) !important;
             border-top: 1px solid var(--sidebar-green-border) !important;
         }
+
         aside .border-slate-800 {
             border-color: var(--sidebar-green-border) !important;
         }
 
         /* Sidebar Navigation Hover */
-        aside nav a.hover\:bg-slate-800\/60:hover, 
+        aside nav a.hover\:bg-slate-800\/60:hover,
         aside nav button.hover\:bg-slate-800\/60:hover,
         aside nav a.hover\:bg-slate-800:hover,
         aside nav button.hover\:bg-slate-800:hover {
@@ -452,7 +479,7 @@
         }
 
         /* Top level active items in sidebar (from bg-blue-600) */
-        aside nav a.bg-blue-600, 
+        aside nav a.bg-blue-600,
         aside nav button.bg-blue-600 {
             background-color: var(--sidebar-green-active) !important;
             color: #ffffff !important;
@@ -470,18 +497,23 @@
         .bg-blue-600 {
             background-color: var(--primary-green) !important;
         }
+
         .text-blue-600 {
             color: var(--primary-green) !important;
         }
+
         .text-blue-500 {
             color: var(--primary-green) !important;
         }
+
         .text-blue-400 {
             color: #8ce9ad !important;
         }
+
         .shadow-blue-500\/20 {
             box-shadow: 0 4px 6px -1px rgba(39, 110, 67, 0.2) !important;
         }
+
         .border-blue-600 {
             border-color: var(--primary-green) !important;
         }
@@ -492,7 +524,10 @@
             border-color: var(--primary-green) !important;
             color: #ffffff !important;
         }
-        .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active {
             background-color: var(--primary-green-hover) !important;
             border-color: var(--primary-green-hover) !important;
             color: #ffffff !important;
@@ -505,7 +540,7 @@
             border-radius: 12px !important;
             overflow: hidden !important;
         }
-        
+
         /* Solid green headers for cards similar to SIAK */
         .card-header {
             background-color: var(--card-header-green) !important;
@@ -513,11 +548,13 @@
             border-bottom: 1px solid var(--primary-green-hover) !important;
             padding: 0.75rem 1.25rem !important;
         }
+
         .card-header-tabs {
             padding: 0 !important;
         }
-        .card-header h5, 
-        .card-header h3, 
+
+        .card-header h5,
+        .card-header h3,
         .card-header .card-title,
         .card-header b,
         .card-header strong {
@@ -526,7 +563,7 @@
             font-size: 1rem !important;
             margin: 0 !important;
         }
-        
+
         /* Card primary outline top border */
         .card.card-primary.card-outline {
             border-top: 4px solid var(--primary-green) !important;
@@ -537,11 +574,13 @@
             background-color: var(--card-filter-bg) !important;
             border: 1px solid var(--card-filter-border) !important;
         }
+
         /* Ensure labels on card-filter stand out nicely */
         .card.card-filter label {
             color: var(--primary-green-active) !important;
             font-weight: 600 !important;
         }
+
         /* White background for input fields on mint green background */
         .card.card-filter .form-control,
         .card.card-filter .form-select {
@@ -553,9 +592,11 @@
         .table {
             background-color: #ffffff !important;
         }
+
         .table tbody tr {
             background-color: #ffffff !important;
         }
+
         /* Restore hover background highlight color */
         .table-hover tbody tr:hover {
             background-color: #f1f5f9 !important;
@@ -572,7 +613,7 @@
             letter-spacing: 0.05em !important;
             vertical-align: middle !important;
         }
-        
+
         /* Active page item pagination */
         .page-item.active .page-link {
             background-color: var(--primary-green) !important;
@@ -580,15 +621,17 @@
             color: #ffffff !important;
             box-shadow: 0 4px 6px -1px rgba(39, 110, 67, 0.2) !important;
         }
-        
+
         /* Focus styles for inputs and selects */
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--primary-green) !important;
             box-shadow: 0 0 0 4px rgba(39, 110, 67, 0.12) !important;
         }
 
         /* Active Bootstrap nav-tabs link style */
-        .nav-tabs .nav-link.active, .nav-pills .nav-link.active {
+        .nav-tabs .nav-link.active,
+        .nav-pills .nav-link.active {
             color: var(--primary-green) !important;
             border-bottom: 3px solid var(--primary-green) !important;
         }
@@ -601,33 +644,41 @@
             border-top-left-radius: calc(0.3rem - 1px) !important;
             border-top-right-radius: calc(0.3rem - 1px) !important;
         }
+
         .modal-header .modal-title {
             color: #ffffff !important;
             font-weight: 700 !important;
         }
+
         .modal-header .close {
             color: #ffffff !important;
             opacity: 0.8 !important;
             text-shadow: none !important;
             outline: none !important;
         }
+
         .modal-header .close:hover {
             color: #ffffff !important;
             opacity: 1 !important;
         }
 
         /* Laporan & Detail Page Tab Menu Styling overrides */
-        #laporanTab .nav-link, #detailTab .nav-link {
+        #laporanTab .nav-link,
+        #detailTab .nav-link {
             color: rgba(255, 255, 255, 0.8) !important;
             border: none !important;
             transition: all 0.2s ease !important;
         }
-        #laporanTab .nav-link.active, #detailTab .nav-link.active {
+
+        #laporanTab .nav-link.active,
+        #detailTab .nav-link.active {
             color: #ffffff !important;
             background-color: rgba(255, 255, 255, 0.15) !important;
             border-bottom: 3px solid #ffffff !important;
         }
-        #laporanTab .nav-link:hover, #detailTab .nav-link:hover {
+
+        #laporanTab .nav-link:hover,
+        #detailTab .nav-link:hover {
             color: #ffffff !important;
             background-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -638,84 +689,88 @@
             border-bottom: 1px solid #c8e6c9 !important;
             padding: 0 !important;
         }
+
         #accordionWilayah .kec-header h5 {
             color: #1b4f30 !important;
         }
+
         #accordionWilayah .kec-header i.fa-map-marker-alt {
             color: #276e43 !important;
         }
+
         #accordionWilayah .kec-header span.badge-primary {
             background-color: #276e43 !important;
             color: #ffffff !important;
         }
 
         /* Force all sidebar text and icons to be white */
-        aside nav a, 
+        aside nav a,
         aside nav button,
         aside nav span,
         aside nav i {
             color: #ffffff !important;
         }
     </style>
-    
+
     @yield('css')
     @stack('css')
 </head>
+
 <body class="bg-slate-50 antialiased" x-data="{ sidebarOpen: true, mobileSidebarOpen: false }">
 
     <!-- Wrapper -->
     <div class="h-screen flex overflow-hidden">
-        
+
         <!-- Sidebar Desktop -->
         <aside class="bg-slate-900 text-slate-300 w-64 flex-shrink-0 hidden md:flex flex-col border-r border-slate-800 transition-all duration-300"
-               :class="sidebarOpen ? 'w-64' : 'w-20'">
-            
+            :class="sidebarOpen ? 'w-64' : 'w-20'">
+
             <!-- Branding Header -->
             <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50 justify-between overflow-hidden">
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('icon/logo4_192.png') }}" class="w-8 h-8 rounded-lg shadow-sm flex-shrink-0" alt="Logo">
-                    <span class="font-title font-bold text-lg text-white tracking-wide transition-all duration-300" 
-                          x-show="sidebarOpen">PONDOK</span>
+                    <span class="font-title font-bold text-lg text-white tracking-wide transition-all duration-300"
+                        x-show="sidebarOpen">PONDOK</span>
                 </div>
             </div>
 
             <!-- Navigation Links -->
             <div class="flex-1 overflow-y-auto py-6 pl-3 pr-4">
                 <nav class="space-y-1">
-                    
+
 
 
                     <!-- Dashboard -->
-                    <a href="{{ route('admin.dashboard') }}" 
-                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
-                       title="Dashboard">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
+                        title="Dashboard">
                         <i class="fas fa-fw fa-tachometer-alt text-lg {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                         <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Dashboard</span>
                     </a>
-                    
+
                     <!-- Transaksi -->
-                    <a href="{{ route('admin.transaksi.index') }}" 
-                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.transaksi.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
-                       title="Transaksi">
+                    <a href="{{ route('admin.transaksi.index') }}"
+                        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.transaksi.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
+                        title="Transaksi">
                         <i class="fas fa-fw fa-tags text-lg {{ request()->routeIs('admin.transaksi.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                         <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Transaksi</span>
                     </a>
-                    
+
                     <!-- Pesan -->
-                    <a href="{{ route('admin.pesan.index') }}" 
-                       class="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.pesan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
-                       title="Pesan">
+                    <a href="{{ route('admin.pesan.index') }}"
+                        class="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.pesan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
+                        title="Pesan">
                         <div class="flex items-center">
                             <i class="fas fa-fw fa-comments text-lg {{ request()->routeIs('admin.pesan.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                             <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Pesan</span>
                         </div>
                         <span id="unread-pesan-badge-desktop" class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full" style="display: none;" x-show="sidebarOpen"></span>
                     </a>
-                    
+
                     <!-- Aktivasi User -->
-                    <a href="{{ route('user_baru.index') }}" 
-                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('user_baru.index') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
-                       title="Aktivasi User">
+                    <a href="{{ route('user_baru.index') }}"
+                        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('user_baru.index') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
+                        title="Aktivasi User">
                         <i class="fas fa-fw fa-key text-lg {{ request()->routeIs('user_baru.index') ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                         <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Aktivasi User</span>
                     </a>
@@ -725,30 +780,30 @@
 
                     <!-- DATA MASTER -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.user.*') || request()->routeIs('admin.formulir.*') || request()->routeIs('admin.persyaratan.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
-                                title="Tabel Master">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
+                            title="Tabel Master">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-table text-lg {{ (request()->routeIs('admin.user.*') || request()->routeIs('admin.formulir.*') || request()->routeIs('admin.persyaratan.*')) ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                                 <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Tabel Master</span>
                             </div>
-                            <i class="fas text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'" 
-                               x-show="sidebarOpen"></i>
+                            <i class="fas text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'"
+                                x-show="sidebarOpen"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1" :class="sidebarOpen ? 'pl-9' : 'pl-2'" x-cloak>
-                            <a href="{{ route('admin.user.index') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.user.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.user.index') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.user.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-users text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">User</span>
                             </a>
-                            <a href="{{ route('admin.formulir.index') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.formulir.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.formulir.index') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.formulir.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-file text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Formulir</span>
                             </a>
-                            <a href="{{ route('admin.persyaratan.index') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.persyaratan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.persyaratan.index') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.persyaratan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-file-alt text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Persyaratan</span>
                             </a>
@@ -759,25 +814,25 @@
 
                     <!-- PENGATURAN -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.jadwal.*') || request()->routeIs('admin.slide.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
-                                title="Pengaturan">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
+                            title="Pengaturan">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-cog text-lg {{ (request()->routeIs('admin.jadwal.*') || request()->routeIs('admin.slide.*')) ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                                 <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Pengaturan</span>
                             </div>
-                            <i class="fas text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'" 
-                               x-show="sidebarOpen"></i>
+                            <i class="fas text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'"
+                                x-show="sidebarOpen"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1" :class="sidebarOpen ? 'pl-9' : 'pl-2'" x-cloak>
-                            <a href="{{ route('admin.jadwal.index') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.jadwal.index') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="far fa-calendar text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Jadwal</span>
                             </a>
-                            <a href="{{ route('admin.slide.index') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.slide.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.slide.index') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.slide.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="far fa-image text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Gambar Slide</span>
                             </a>
@@ -786,30 +841,30 @@
 
                     <!-- SINKRONISASI -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.sinkronisasi.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
-                                title="Sinkronisasi">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800/60 transition-all duration-200 group text-slate-300 focus:outline-none"
+                            title="Sinkronisasi">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-sync-alt text-lg {{ (request()->routeIs('admin.sinkronisasi.*')) ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                                 <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Sinkronisasi</span>
                             </div>
-                            <i class="fas text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'" 
-                               x-show="sidebarOpen"></i>
+                            <i class="fas text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'fa-chevron-down rotate-180' : 'fa-chevron-right'"
+                                x-show="sidebarOpen"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1" :class="sidebarOpen ? 'pl-9' : 'pl-2'" x-cloak>
-                            <a href="{{ route('admin.sinkronisasi.transaksi') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.transaksi') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.sinkronisasi.transaksi') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.transaksi') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-exchange-alt text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Cek Transaksi</span>
                             </a>
-                            <a href="{{ route('admin.sinkronisasi.wilayah') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.wilayah') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.sinkronisasi.wilayah') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.wilayah') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-map-marker-alt text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Cek Wilayah</span>
                             </a>
-                            <a href="{{ route('admin.sinkronisasi.riwayat') }}" 
-                               class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.riwayat') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
+                            <a href="{{ route('admin.sinkronisasi.riwayat') }}"
+                                class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.riwayat') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
                                 <i class="fas fa-trash-alt text-xs mr-3 w-4 text-center"></i>
                                 <span x-show="sidebarOpen">Riwayat Hapus</span>
                             </a>
@@ -820,9 +875,9 @@
 
 
                     <!-- Laporan Link -->
-                    <a href="{{ route('admin.laporan.index') }}" 
-                       class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.laporan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
-                       title="Laporan">
+                    <a href="{{ route('admin.laporan.index') }}"
+                        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.laporan.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'hover:bg-slate-800/60 hover:text-white' }}"
+                        title="Laporan">
                         <i class="fas fa-fw fa-chart-line text-lg {{ request()->routeIs('admin.laporan.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }} w-6"></i>
                         <span class="ml-3 transition-opacity duration-300" x-show="sidebarOpen">Laporan</span>
                     </a>
@@ -845,25 +900,25 @@
 
         <!-- Sidebar Mobile Backdrop -->
         <div class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm md:hidden transition-opacity duration-300"
-             x-show="mobileSidebarOpen"
-             x-transition:enter="ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             @click="mobileSidebarOpen = false"></div>
+            x-show="mobileSidebarOpen"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="mobileSidebarOpen = false"></div>
 
         <!-- Sidebar Mobile Menu -->
         <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 md:hidden flex flex-col transition-transform duration-300"
-               x-show="mobileSidebarOpen"
-               x-transition:enter="transition ease-out duration-300 transform"
-               x-transition:enter-start="-translate-x-full"
-               x-transition:enter-end="translate-x-0"
-               x-transition:leave="transition ease-in duration-200 transform"
-               x-transition:leave-start="translate-x-0"
-               x-transition:leave-end="-translate-x-full">
-            
+            x-show="mobileSidebarOpen"
+            x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full">
+
             <!-- Branding Header -->
             <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50 justify-between">
                 <div class="flex items-center gap-3">
@@ -879,7 +934,7 @@
             <div class="flex-1 overflow-y-auto py-6 pl-3 pr-4">
                 <nav class="space-y-1">
 
-                    
+
                     <!-- Dashboard -->
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-xl {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800' }}">
                         <i class="fas fa-fw fa-tachometer-alt text-lg mr-3 w-6"></i>
@@ -908,14 +963,14 @@
 
                     <!-- DATA MASTER MOBILE -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.user.*') || request()->routeIs('admin.formulir.*') || request()->routeIs('admin.persyaratan.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-table text-lg mr-3 w-6"></i>
                                 <span>Tabel Master</span>
                             </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'rotate-180' : ''"></i>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'rotate-180' : ''"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1 pl-9" x-cloak>
                             <a href="{{ route('admin.user.index') }}" class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.user.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
@@ -936,14 +991,14 @@
 
                     <!-- PENGATURAN MOBILE -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.jadwal.*') || request()->routeIs('admin.slide.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-cog text-lg mr-3 w-6"></i>
                                 <span>Pengaturan</span>
                             </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'rotate-180' : ''"></i>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'rotate-180' : ''"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1 pl-9" x-cloak>
                             <a href="{{ route('admin.jadwal.index') }}" class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.jadwal.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
@@ -959,14 +1014,14 @@
 
                     <!-- SINKRONISASI MOBILE -->
                     <div x-data="{ open: {{ (request()->routeIs('admin.sinkronisasi.*')) ? 'true' : 'false' }} }">
-                        <button @click="open = !open" 
-                                class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
+                        <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 group text-slate-300 focus:outline-none">
                             <div class="flex items-center">
                                 <i class="fas fa-fw fa-sync-alt text-lg mr-3 w-6"></i>
                                 <span>Sinkronisasi</span>
                             </div>
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500" 
-                               :class="open ? 'rotate-180' : ''"></i>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200 text-slate-500"
+                                :class="open ? 'rotate-180' : ''"></i>
                         </button>
                         <div x-show="open" x-collapse class="mt-1 space-y-1 pl-9" x-cloak>
                             <a href="{{ route('admin.sinkronisasi.transaksi') }}" class="flex items-center px-3 py-1.5 text-sm rounded-lg transition-colors {{ request()->routeIs('admin.sinkronisasi.transaksi') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-400 hover:text-white' }}">
@@ -1009,35 +1064,35 @@
 
         <!-- Main Content Wrapper -->
         <div class="flex-1 flex flex-col min-w-0">
-            
+
             <!-- Top Navbar -->
             <header class="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-6 sticky top-0 z-30">
-                
+
                 <!-- Navbar Left: Toggles -->
                 <div class="flex items-center gap-4">
                     <!-- Hamburger Desktop -->
                     <button class="text-slate-500 hover:text-slate-800 focus:outline-none hidden md:block"
-                            @click="sidebarOpen = !sidebarOpen">
+                        @click="sidebarOpen = !sidebarOpen">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                     <!-- Hamburger Mobile -->
                     <button class="text-slate-500 hover:text-slate-800 focus:outline-none md:hidden"
-                            @click="mobileSidebarOpen = true">
+                        @click="mobileSidebarOpen = true">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    
+
                     <!-- Page Header / Breadcrumb -->
                     <div class="top-nav-header font-title font-semibold text-lg text-slate-800 hidden sm:block">
                         @php
-                            $titleText = '';
-                            if (View::hasSection('title')) {
-                                $titleText = View::yieldContent('title');
-                                // Clean up title: strip common suffixes and prefixes
-                                $titleText = str_ireplace(['admin - ', 'kelola ', ' - pondok', ' admin', 'detail ', 'data '], '', $titleText);
-                            }
-                            if (empty($titleText) || str_contains(strtolower($titleText), 'pondok')) {
-                                $titleText = 'Dashboard';
-                            }
+                        $titleText = '';
+                        if (View::hasSection('title')) {
+                        $titleText = View::yieldContent('title');
+                        // Clean up title: strip common suffixes and prefixes
+                        $titleText = str_ireplace(['admin - ', 'kelola ', ' - pondok', ' admin', 'detail ', 'data '], '', $titleText);
+                        }
+                        if (empty($titleText) || str_contains(strtolower($titleText), 'pondok')) {
+                        $titleText = 'Dashboard';
+                        }
                         @endphp
                         {!! trim($titleText) !!}
                     </div>
@@ -1045,7 +1100,7 @@
 
                 <!-- Navbar Right: Profile & Action Links -->
                 <div class="flex items-center gap-4">
-                    
+
                     <!-- App Link -->
                     <a href="{{ route('home') }}" target="_blank" class="text-slate-500 hover:text-slate-800 flex items-center gap-1.5 text-sm font-medium px-2.5 py-1.5 rounded-lg hover:bg-slate-50 transition-colors" title="Lihat Website">
                         <i class="fas fa-external-link-alt text-base"></i>
@@ -1064,19 +1119,19 @@
 
                         <!-- Dropdown Menu -->
                         <div class="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg py-1 z-50 origin-top-right transform transition-all duration-100"
-                             x-show="dropdownOpen"
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="transform opacity-100 scale-100"
-                             x-transition:leave-end="transform opacity-0 scale-95">
-                            
+                            x-show="dropdownOpen"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95">
+
                             <div class="px-4 py-2 border-b border-slate-100">
                                 <p class="text-sm font-semibold text-slate-800 truncate">{{ auth()->user()->name }}</p>
                                 <p class="text-xs text-slate-500 truncate">{{ auth()->user()->level_name }}</p>
                             </div>
-                            
+
                             <a href="{{ route('admin.profile.show') }}" class="flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 gap-2.5">
                                 <i class="fas fa-user text-slate-400 w-4 text-center"></i>
                                 <span>Profil Saya</span>
@@ -1085,9 +1140,9 @@
                                 <i class="fas fa-unlock text-slate-400 w-4 text-center"></i>
                                 <span>Ubah Sandi</span>
                             </a>
-                            
+
                             <div class="border-t border-slate-100 my-1"></div>
-                            
+
                             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 gap-2.5 font-medium">
                                 <i class="fas fa-sign-out-alt text-red-400 w-4 text-center"></i>
                                 <span>Keluar</span>
@@ -1103,15 +1158,15 @@
             <main class="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8">
                 <!-- Content Header (Original Page Title & Action Buttons) -->
                 @if(View::hasSection('content_header'))
-                    @php
-                        $headerContent = trim(View::yieldContent('content_header'));
-                        $cleanHeader = trim(strip_tags($headerContent));
-                    @endphp
-                    @if(!empty($cleanHeader))
-                        <div class="content-header-container mb-4">
-                            {!! $headerContent !!}
-                        </div>
-                    @endif
+                @php
+                $headerContent = trim(View::yieldContent('content_header'));
+                $cleanHeader = trim(strip_tags($headerContent));
+                @endphp
+                @if(!empty($cleanHeader))
+                <div class="content-header-container mb-4">
+                    {!! $headerContent !!}
+                </div>
+                @endif
                 @endif
 
 
@@ -1119,12 +1174,12 @@
                 <!-- Page Content -->
                 @yield('content')
             </main>
-            
+
             <!-- Hidden logout form -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
-            
+
         </div>
 
     </div>
@@ -1138,23 +1193,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if(session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: "{!! addslashes(session('success')) !!}",
-                    confirmButtonText: 'OK',
-                    timer: 3000,
-                    timerProgressBar: true
-                });
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{!! addslashes(session('success')) !!}",
+                confirmButtonText: 'OK',
+                timer: 3000,
+                timerProgressBar: true
+            });
             @endif
 
             @if(session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: "{!! addslashes(session('error')) !!}",
-                    confirmButtonText: 'OK'
-                });
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{!! addslashes(session('error')) !!}",
+                confirmButtonText: 'OK'
+            });
             @endif
         });
 
@@ -1199,4 +1254,5 @@
     @yield('js')
     @stack('js')
 </body>
+
 </html>
