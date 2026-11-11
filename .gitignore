@@ -1,0 +1,43 @@
+# ============================================================
+# Pondok Dukcapil Tapin — .gitignore
+# ============================================================
+
+# --- Dependensi & build ---
+/node_modules
+/vendor
+/public/build
+/public/hot
+composer.phar
+auth.json
+npm-debug.log
+yarn-error.log
+
+# Catatan: public/css/app.css (hasil build Tailwind) SENGAJA di-commit
+# agar server produksi tidak perlu menjalankan npm/npx saat deploy.
+
+# --- Konfigurasi & rahasia ---
+.env
+.env.backup
+.env.local
+.env.production
+/storage/*.key
+
+# --- Storage runtime ---
+# Isi storage/ (uploads, log, session, cache, view terkompilasi) diabaikan
+# lewat .gitignore di masing-masing subfolder, bukan di sini.
+/public/storage
+
+# --- Cache & artefak pengujian ---
+.phpunit.result.cache
+/.phpunit.cache
+.phpstorm.meta.php
+docker-compose.override.yml
+
+# --- Editor & OS ---
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.stackdump
+*.mwb

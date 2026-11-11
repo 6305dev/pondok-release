@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json.schemastore.net/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "npx -y tailwindcss@3.4.17 -c tailwind.config.js -i resources/css/tailwind.css -o public/css/app.css --minify",
+        "watch": "npx -y tailwindcss@3.4.17 -c tailwind.config.js -i resources/css/tailwind.css -o public/css/app.css --watch"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.4.17"
+    }
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pondok Dukcapil</title>
+    <meta name="description" content="Pondok Dukcapil - Pelayanan Online Dokumen Kependudukan">
+    <meta name="google-site-verification" content="Wx-llL9o1seVzxOyS7OyYC_R2mLKPCUusrqqPg_jBvI" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+
+<body class="h-full">
+    <main class="gradient-bg min-h-full flex items-center justify-center text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+            <!-- Logo/Brand -->
+            <div class="mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-yellow-300 mb-2">PONDOK DUKCAPIL</h1>
+                <p class="text-lg opacity-90">Pelayanan Online Dokumen Kependudukan</p>
+            </div>
+
+            <!-- Main Heading -->
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                Close /
+                <span class="text-yellow-300">Tutup</span>
+            </h2>
+
+            <p class="text-xl md:text-2xl mb-12 opacity-90 max-w-2xl mx-auto">
+                Mohon maaf saat ini kami sedang di luar jam layanan, untuk sementara menu pelayanan tidak
+                dapat diakses.
+            </p>
+
+            <!-- Countdown Timer -->
+            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-8 mb-12 max-w-lg mx-auto">
+                <h3 class="text-xl font-semibold mb-6">Akan buka kembali dalam :</h3>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-white bg-opacity-30 rounded-lg p-4">
+                        <div id="days" class="text-3xl md:text-4xl font-bold">00</div>
+                        <div class="text-sm uppercase tracking-wide">Hari</div>
+                    </div>
+                    <div class="bg-white bg-opacity-30 rounded-lg p-4">
+                        <div id="hours" class="text-3xl md:text-4xl font-bold">00</div>
+                        <div class="text-sm uppercase tracking-wide">Jam</div>
+                    </div>
+                    <div class="bg-white bg-opacity-30 rounded-lg p-4">
+                        <div id="minutes" class="text-3xl md:text-4xl font-bold">00</div>
+                        <div class="text-sm uppercase tracking-wide">Menit</div>
+                    </div>
+                    <div class="bg-white bg-opacity-30 rounded-lg p-4">
+                        <div id="seconds" class="text-3xl md:text-4xl font-bold">00</div>
+                        <div class="text-sm uppercase tracking-wide">Detik</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Highlights -->
+            <div class="grid md:grid-cols-2 gap-6 mb-12 max-w-3xl mx-auto">
+                <div class="bg-white bg-opacity-10 rounded-lg p-6">
+                    <div class="text-3xl mb-3">🔧</div>
+                    <h4 class="font-semibold mb-2">Maintenance Rutin</h4>
+                    <p class="text-sm opacity-80">Perbaikan dan pembaharuan aplikasi</p>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-6">
+                    <div class="text-3xl mb-3">💬</div>
+                    <h4 class="font-semibold mb-2">Konsultasi Online</h4>
+                    <p class="text-sm opacity-80">+62 815-2220-112</p>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="mt-12 pt-8 border-t border-white border-opacity-20">
+                <div
+                    class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-sm opacity-90">
+                    <div class="flex items-center">
+                        <span class="mr-2">📱</span>
+                        <span>+62 811-5113-141</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="mr-2">✉️</span>
+                        <span>pengaduan@dukcapil.tapinkab.go.id</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="mr-2">⭐</span>
+                        <span>@disdukcapiltapin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Countdown Timer
+        function countdown(targetDate) {
+            const now = new Date().getTime();
+            const distance = targetDate.getTime() - now;
+
+            if (distance < 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 1);
+
+        // Update countdown every second
+        setInterval(() => countdown(targetDate), 1000);
+        countdown(targetDate); // Initial call
+
+    </script>
+</body>
+
+</html>
