@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\DokumenController;
 use App\Http\Controllers\KomplainController;
 use App\Models\SetupKel;
 use App\Http\Controllers\PesanController;
-use App\Http\Controllers\ChatProxyController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Admin\FormulirController as AdminFormulirController;
 use App\Http\Controllers\Admin\PersyaratanController as AdminPersyaratanController;
 use Illuminate\Http\Request;
@@ -101,10 +101,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
     Route::get('/bukti/{id_trx}', [PengajuanController::class, 'showBukti'])->name('bukti');
 
-    // Proxy REST API chat — kunci API tidak pernah bocor ke browser
-    Route::get('/chat-proxy/conversation/{peerId?}', [ChatProxyController::class, 'conversation'])->name('chat.proxy.conversation');
-    Route::get('/chat-proxy/admin-conversations', [ChatProxyController::class, 'adminConversations'])->name('chat.proxy.admin');
-    Route::post('/chat-proxy/upload', [ChatProxyController::class, 'upload'])->name('chat.proxy.upload');
+    // Chat internal (tersimpan di database, tanpa realtime).
+    // Throttle menjaga endpoint polling dari flood; 120 req/menit jauh
+    // di atas konsumsi normal (12-18 req/menit per tab aktif).
+    Route::middleware('throttle:120,1')->group(function () {
+        Route::get('/chat-proxy/conversation/{peerId?}', [ChatController::class, 'conversation'])->name('chat.conversation');
+        Route::get('/chat-proxy/admin-conversations', [ChatController::class, 'adminConversations'])->name('chat.proxy.admin');
+        Route::get('/chat-proxy/unread-count', [ChatController::class, 'unreadCount'])->name('chat.unread');
+        Route::post('/chat-proxy/send', [ChatController::class, 'send'])->name('chat.send');
+        Route::get('/chat/attachments/{path}', [ChatController::class, 'image'])->name('chat.image');
+    });
 });
 
 // Rute publik yang dilindungi jadwal (tidak perlu login)

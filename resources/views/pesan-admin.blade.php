@@ -632,7 +632,7 @@
         </div>
 
         <div id="chat-input-area">
-            <input type="file" id="admin-file-input" accept="image/*" style="display:none;">
+            <input type="file" id="admin-file-input" accept="image/jpeg,image/png,image/webp" style="display:none;">
             <button id="upload-button" title="Kirim Gambar">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                     <path
@@ -671,20 +671,7 @@
 @endsection
 
 @section('js')
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-    const SERVER_URL = "{{ config('services.chat.url') }}";
-    const ADMIN_ID = "{{ config('services.chat.admin_id') }}";
-    const IMAGE_PROXY_PATH = "/imgs";
-    const IMAGE_SERVER_PATH = "/uploads";
-
-    function resolveImageUrl(imageUrl) {
-        if (!imageUrl) return imageUrl;
-        return imageUrl.replace(IMAGE_SERVER_PATH, IMAGE_PROXY_PATH);
-    }
-
-    const socket = window.globalAdminSocket || io(SERVER_URL);
-
     const userList = document.getElementById('user-list');
     const headerAvatar = document.getElementById('header-avatar');
     const headerTitle = document.getElementById('header-title');
@@ -694,6 +681,17 @@
     const sendButton = document.getElementById('send-button');
 
     let currentChatUserId = null;
+    let lastMessageId = 0;
+
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, s => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[s]));
+    }
 
     document.getElementById('search-user-input').addEventListener('input', function() {
         filterUsers(this.value);
@@ -724,7 +722,7 @@
         if (imageUrl) {
             const img = document.createElement('img');
             img.className = 'chat-img';
-            const imgSrc = resolveImageUrl(imageUrl);
+            const imgSrc = imageUrl;
             img.src = imgSrc;
             img.alt = 'Gambar';
             img.loading = 'lazy';
@@ -782,29 +780,29 @@
                 userItem.classList.add('active');
             }
 
-            const initial = (conv.user.username || 'U').charAt(0).toUpperCase();
+            const initial = (conv.user.name || 'U').charAt(0).toUpperCase();
 
-            const lastMsg = conv.messages && conv.messages.length > 0 ? conv.messages[0] : null;
+            const lastMsg = conv.lastMessage || null;
             const formattedDate = lastMsg ? formatLastDate(lastMsg.createdAt) : '';
             const lastSnippet = lastMsg ? (lastMsg.imageUrl ? '📷 Gambar' : lastMsg.content) : `User ID: ${conv.user.id}`;
 
-            const unreadCount = conv.messages ? conv.messages.filter(m => !m.isRead && m.senderId === conv.user.id).length : 0;
+            const unreadCount = conv.unreadCount || 0;
 
             userItem.innerHTML = `
                     <div class="user-avatar">${initial}</div>
                     <div class="user-info">
                         <div class="user-top">
-                            <div class="user-name">${conv.user.username}</div>
+                            <div class="user-name">${escapeHtml(conv.user.name)}</div>
                             <div class="user-time">${formattedDate}</div>
                         </div>
                         <div class="user-bottom">
-                            <div class="user-subtext">${lastSnippet}</div>
+                            <div class="user-subtext">${escapeHtml(lastSnippet)}</div>
                             ${unreadCount > 0 ? `<span class="unread-badge">${unreadCount}</span>` : ''}
                         </div>
                     </div>
                 `;
 
-            userItem.onclick = () => selectUser(conv.user.id, conv.user.username);
+            userItem.onclick = () => selectUser(conv.user.id, conv.user.name);
             userList.appendChild(userItem);
         });
     }
@@ -816,7 +814,7 @@
             return;
         }
         const filtered = allConversations.filter(conv => {
-            const nameMatch = (conv.user.username || '').toLowerCase().includes(q);
+            const nameMatch = (conv.user.name || '').toLowerCase().includes(q);
             const idMatch = String(conv.user.id).toLowerCase().includes(q);
             return nameMatch || idMatch;
         });
@@ -826,8 +824,7 @@
     function updateSidebarBadges() {
         let totalUnread = 0;
         allConversations.forEach(c => {
-            const unread = c.messages ? c.messages.filter(m => !m.isRead && m.senderId === c.user.id).length : 0;
-            totalUnread += unread;
+            totalUnread += c.unreadCount || 0;
         });
         const badgeDesktop = document.getElementById('unread-pesan-badge-desktop');
         const badgeMobile = document.getElementById('unread-pesan-badge-mobile');
@@ -876,18 +873,12 @@
         }
 
         currentChatUserId = userId;
+        lastMessageId = 0;
 
-        // Mark messages as read on the server
-        socket.emit('markMessagesAsRead', { otherUserId: userId });
-
-        // Update local count
+        // Update local count (server menandai terbaca saat thread dimuat)
         const conversation = allConversations.find(c => c.user.id === userId);
         if (conversation) {
-            conversation.messages.forEach(msg => {
-                if (msg.senderId === userId) {
-                    msg.isRead = true;
-                }
-            });
+            conversation.unreadCount = 0;
             updateSidebarBadges();
             // Re-render user list
             const currentQuery = document.getElementById('search-user-input')?.value || '';
@@ -906,7 +897,10 @@
             const messages = await response.json();
 
             messages.forEach(msg => {
-                const sender = (msg.sender.id === ADMIN_ID) ? 'me' : 'user';
+                if (msg.id && msg.id > lastMessageId) {
+                    lastMessageId = msg.id;
+                }
+                const sender = msg.mine ? 'me' : 'user';
                 displayMessage(msg.content, sender, msg.imageUrl, msg.createdAt);
             });
 
@@ -919,46 +913,86 @@
         }
     }
 
-    function sendMessage() {
+    async function sendMessage() {
         const content = input.value.trim();
-        if (content && currentChatUserId) {
-            socket.emit('replyToUser', {
-                userId: currentChatUserId,
-                messageContent: content
+        if (!content) return;
+
+        if (!currentChatUserId) {
+            alert('Pilih user terlebih dahulu dari daftar di sebelah kiri.');
+            return;
+        }
+
+        sendButton.disabled = true;
+        try {
+            const response = await fetch('/chat-proxy/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    peer_id: currentChatUserId,
+                    content: content
+                })
             });
+            if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+
+            const msg = await response.json();
+            if (msg.id && msg.id > lastMessageId) {
+                lastMessageId = msg.id;
+            }
+            displayMessage(msg.content, 'me', msg.imageUrl, msg.createdAt);
+            loadAllConversations();
+
             input.value = '';
             input.style.height = '42px'; // Reset height
-        } else if (!currentChatUserId) {
-            alert('Pilih user terlebih dahulu dari daftar di sebelah kiri.');
+        } catch (err) {
+            alert('Gagal mengirim pesan: ' + err.message);
+        } finally {
+            sendButton.disabled = false;
         }
     }
 
-    socket.on('connect', () => {
-        console.log('Admin terhubung ke server!');
-        socket.emit('register', {
-            id: ADMIN_ID,
-            role: 'admin'
-        });
-        loadAllConversations();
-    });
+    loadAllConversations();
 
-    socket.on('newMessageFromUser', (message) => {
-        loadAllConversations();
-        if (message.sender.id === currentChatUserId) {
-            displayMessage(message.content, 'user', message.imageUrl, message.createdAt);
-            socket.emit('markMessagesAsRead', { otherUserId: currentChatUserId });
+    // Polling dijeda saat tab tidak aktif agar tidak membebani server
+    let pollingPaused = document.hidden;
+
+    document.addEventListener('visibilitychange', () => {
+        pollingPaused = document.hidden;
+        if (!pollingPaused) {
+            pollNewMessages();
+            loadAllConversations();
         }
     });
 
-    socket.on('messagesRead', ({ userId }) => {
-        loadAllConversations();
-    });
+    async function pollNewMessages() {
+        if (pollingPaused || !currentChatUserId) return;
+        try {
+            const response = await fetch(`/chat-proxy/conversation/${currentChatUserId}?after_id=` + lastMessageId);
+            if (!response.ok) return;
 
-    socket.on('newMessageFromAdmin', (message) => {
-        if (message.receiver.id === currentChatUserId) {
-            displayMessage(message.content, 'me', message.imageUrl, message.createdAt);
+            const messages = await response.json();
+            if (messages.length === 0) return;
+
+            messages.forEach(msg => {
+                if (msg.id && msg.id > lastMessageId) {
+                    lastMessageId = msg.id;
+                }
+                displayMessage(msg.content, msg.mine ? 'me' : 'user', msg.imageUrl, msg.createdAt);
+            });
+        } catch (error) {
+            console.error('Gagal memuat pesan baru:', error);
         }
-    });
+    }
+
+    // Polling pesan baru untuk percakapan yang sedang terbuka
+    setInterval(pollNewMessages, 5000);
+
+    // Polling daftar percakapan (badge & pesan terakhir)
+    setInterval(() => {
+        if (!pollingPaused) loadAllConversations();
+    }, 10000);
 
     sendButton.addEventListener('click', sendMessage);
     
@@ -1032,19 +1066,21 @@
         formData.append('image', selectedFile);
 
         try {
-            const res = await fetch('/chat-proxy/upload', {
+            formData.append('peer_id', currentChatUserId);
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.content || '');
+
+            const res = await fetch('/chat-proxy/send', {
                 method: 'POST',
                 body: formData
             });
-            if (!res.ok) throw new Error('Upload gagal');
-            const {
-                imageUrl
-            } = await res.json();
+            if (!res.ok) throw new Error('Gagal mengunggah (HTTP ' + res.status + ')');
+            const msg = await res.json();
 
-            socket.emit('replyImageToUser', {
-                userId: currentChatUserId,
-                imageUrl
-            });
+            if (msg.id && msg.id > lastMessageId) {
+                lastMessageId = msg.id;
+            }
+            displayMessage(msg.content, 'me', msg.imageUrl, msg.createdAt);
+            loadAllConversations();
 
             previewOverlay.classList.remove('open');
             selectedFile = null;

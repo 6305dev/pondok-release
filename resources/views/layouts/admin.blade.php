@@ -1158,32 +1158,41 @@
             @endif
         });
 
-        // Pemicu muat jumlah pesan belum dibaca di sidebar
+        // Pemicu muat jumlah pesan belum dibaca di sidebar (chat internal,
+        // diperbarui lewat polling berkala karena tidak memakai realtime)
         (function() {
-            fetch('/chat-proxy/admin-conversations')
-                .then(response => response.json())
-                .then(conversations => {
+            async function refreshUnreadBadges() {
+                try {
+                    // Hemat request: lewati saat tab tidak aktif
+                    if (document.hidden) return;
+                    const response = await fetch('/chat-proxy/admin-conversations');
+                    if (!response.ok) return;
+                    const conversations = await response.json();
+
                     let totalUnread = 0;
                     conversations.forEach(conv => {
-                        const unread = conv.messages ? conv.messages.filter(m => !m.isRead && m.senderId === conv.user.id).length : 0;
-                        totalUnread += unread;
+                        totalUnread += conv.unreadCount || 0;
                     });
-                    
-                    if (totalUnread > 0) {
-                        const badgeDesktop = document.getElementById('unread-pesan-badge-desktop');
-                        const badgeMobile = document.getElementById('unread-pesan-badge-mobile');
-                        
-                        if (badgeDesktop) {
-                            badgeDesktop.textContent = totalUnread;
-                            badgeDesktop.style.display = 'inline-block';
+
+                    const badgeDesktop = document.getElementById('unread-pesan-badge-desktop');
+                    const badgeMobile = document.getElementById('unread-pesan-badge-mobile');
+
+                    [badgeDesktop, badgeMobile].forEach(badge => {
+                        if (!badge) return;
+                        if (totalUnread > 0) {
+                            badge.textContent = totalUnread;
+                            badge.style.display = 'inline-block';
+                        } else {
+                            badge.style.display = 'none';
                         }
-                        if (badgeMobile) {
-                            badgeMobile.textContent = totalUnread;
-                            badgeMobile.style.display = 'inline-block';
-                        }
-                    }
-                })
-                .catch(err => console.error('Gagal memuat jumlah pesan belum dibaca:', err));
+                    });
+                } catch (err) {
+                    console.error('Gagal memuat jumlah pesan belum dibaca:', err);
+                }
+            }
+
+            refreshUnreadBadges();
+            setInterval(refreshUnreadBadges, 30000);
         })();
     </script>
 

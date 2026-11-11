@@ -40,19 +40,4 @@ return [
         'secret_key' => env('TURNSTILE_SECRET_KEY'),
     ],
 
-    'whatsapp' => [
-        'url' => env('WHATSAPP_URL'),
-        'token' => env('WHATSAPP_TOKEN'),
-        'referal' => env('WHATSAPP_REFERAL'),
-    ],
-
-    'chat' => [
-        // Server chat real-time (Node.js/socket.io) — hanya koneksi websocket
-        // yang boleh langsung dari browser; panggilan REST diproxy lewat
-        // ChatProxyController agar kunci API tidak pernah bocor ke sisi klien.
-        'url' => env('SOCKET_URL'),
-        'admin_id' => env('ADMIN_ID'),
-        'secret' => env('SECRET_KEY'),
-    ],
-
 ];

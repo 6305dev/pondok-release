@@ -22,7 +22,7 @@
         <main class="chat-body" id="messages"></main>
 
         <form class="chat-footer" id="form">
-            <input type="file" id="file-input" accept="image/*" style="display:none;">
+            <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none;">
             <button type="button" id="btn-upload" aria-label="Upload Gambar" title="Kirim Gambar">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -560,23 +560,6 @@
 @push('scripts')
 
 <script>
-    const SERVER_URL = "{{ config('services.chat.url') }}";
-    const ADMIN_ID = "{{ config('services.chat.admin_id') }}";
-    const USER_ID = "{{ auth()->user()->nik}}";
-    const USER_NAME = "{{ auth()->user()->name}}";
-    const IMAGE_PROXY_PATH = "/imgs";
-    const IMAGE_SERVER_PATH = "/uploads";
-
-    function resolveImageUrl(imageUrl) {
-        if (!imageUrl) return imageUrl;
-        return imageUrl.replace(IMAGE_SERVER_PATH, IMAGE_PROXY_PATH);
-    }
-</script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>
-    const socket = io(SERVER_URL, {
-        transports: ["websocket", "polling"]
-    });
     const form = document.getElementById('form');
     const input = document.getElementById('input');
     const box = document.getElementById('messages');
@@ -687,7 +670,7 @@
         if (imageUrl) {
             const img = document.createElement('img');
             img.className = 'chat-img';
-            const imgSrc = resolveImageUrl(imageUrl);
+            const imgSrc = imageUrl;
             img.src = imgSrc;
             img.alt = 'Gambar';
             img.loading = 'lazy';
@@ -715,7 +698,16 @@
         box.scrollTop = box.scrollHeight;
     }
 
-    // FUNGSI YANG SUDAH DIPERBAIKI
+    let lastMessageId = 0;
+
+    // Tambahkan satu pesan ke UI + lacak id terakhir untuk polling
+    function appendMessage(msg) {
+        if (msg.id && msg.id > lastMessageId) {
+            lastMessageId = msg.id;
+        }
+        addBubble(msg.content, msg.mine ? 'me' : 'admin', msg.createdAt, msg.imageUrl);
+    }
+
     async function loadMessageHistory() {
         // Tampilkan indikator loading (opsional)
         box.innerHTML = '<div style="text-align:center; color:#888;">Memuat pesan...</div>';
@@ -725,24 +717,16 @@
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const messages = await response.json();
 
             // Kosongkan kotak pesan sebelum menambahkan histori
             box.innerHTML = '';
             lastDisplayedDate = null; // Reset tanggal terakhir yang ditampilkan
+            lastMessageId = 0;
 
             // Tampilkan setiap pesan
-            messages.forEach(msg => {
-                // PERBAIKAN: Akses ID pengirim dari objek 'sender' yang bersarang
-                // Fallback ke msg.senderId jika 'sender' tidak ada
-                const senderIdFromApi = msg.sender ? msg.sender.id : msg.senderId;
-
-                // Bandingkan dengan ID user yang sedang login
-                const sender = (senderIdFromApi == USER_ID) ? 'me' : 'admin';
-
-                addBubble(msg.content, sender, msg.createdAt, msg.imageUrl);
-            });
+            messages.forEach(appendMessage);
 
             // Scroll ke pesan terakhir setelah semua pesan di-render
             requestAnimationFrame(() => {
@@ -758,32 +742,62 @@
     // Panggil fungsi untuk memuat histori saat halaman dibuka
     loadMessageHistory();
 
-    socket.on('connect', () => {
-        socket.emit('register', {
-            id: `${USER_ID}`,
-            username: `${USER_NAME}`,
-            role: 'user'
-        });
-        socket.emit('markMessagesAsRead', { otherUserId: `${ADMIN_ID}` });
-    });
-    socket.on('newMessageFromAdmin', m => {
-        addBubble(m.content, 'admin', m.createdAt, m.imageUrl);
-        socket.emit('markMessagesAsRead', { otherUserId: `${ADMIN_ID}` });
+    // Polling pesan baru (tanpa realtime/socket.io).
+    // Dijeda saat tab tidak aktif agar tidak membebani server.
+    let pollingPaused = document.hidden;
+
+    document.addEventListener('visibilitychange', () => {
+        pollingPaused = document.hidden;
+        if (!pollingPaused) pollNewMessages();
     });
 
-    form.addEventListener('submit', e => {
+    async function pollNewMessages() {
+        if (pollingPaused) return;
+        try {
+            const response = await fetch('/chat-proxy/conversation?after_id=' + lastMessageId);
+            if (!response.ok) return;
+
+            const messages = await response.json();
+            if (messages.length === 0) return;
+
+            messages.forEach(appendMessage);
+            box.scrollTop = box.scrollHeight;
+        } catch (error) {
+            console.error('Gagal memuat pesan baru:', error);
+        }
+    }
+
+    setInterval(pollNewMessages, 5000);
+
+    form.addEventListener('submit', async e => {
         e.preventDefault();
         const pesan = input.value.trim();
         if (!pesan) return;
 
-        // Tambahkan pesan ke UI dengan timestamp saat ini
-        const now = new Date().toISOString();
-        addBubble(pesan, 'me', now);
+        const btnSend = document.querySelector('.btn-send');
+        if (btnSend) btnSend.disabled = true;
 
-        // Kirim pesan ke server
-        socket.emit('sendMessageToAdmin', pesan);
-        input.value = '';
-        input.style.height = '42px';
+        try {
+            const response = await fetch('/chat-proxy/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({ content: pesan })
+            });
+            if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+
+            const msg = await response.json();
+            appendMessage(msg);
+            box.scrollTop = box.scrollHeight;
+            input.value = '';
+            input.style.height = '42px';
+        } catch (err) {
+            alert('Gagal mengirim pesan: ' + err.message);
+        } finally {
+            if (btnSend) btnSend.disabled = false;
+        }
     });
 
     // --- UPLOAD GAMBAR ---
@@ -830,23 +844,19 @@
 
         const formData = new FormData();
         formData.append('image', selectedFile);
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.content || '');
 
         try {
-            const res = await fetch('/chat-proxy/upload', {
+            const res = await fetch('/chat-proxy/send', {
                 method: 'POST',
                 body: formData
             });
-            if (!res.ok) throw new Error('Upload gagal');
-            const {
-                imageUrl
-            } = await res.json();
+            if (!res.ok) throw new Error('Gagal mengunggah (HTTP ' + res.status + ')');
+            const msg = await res.json();
 
             // Tampilkan di UI lokal
-            const now = new Date().toISOString();
-            addBubble(null, 'me', now, imageUrl);
-
-            // Kirim ke server via socket
-            socket.emit('sendImageToAdmin', imageUrl);
+            appendMessage(msg);
+            box.scrollTop = box.scrollHeight;
 
             previewOverlay.classList.remove('open');
             selectedFile = null;
@@ -881,7 +891,8 @@
         setTimeout(() => input.focus(), 100);
     });
 
-    $("footer").hide()
+    // Sembunyikan footer nav bawah agar tampilan chat penuh layar
+    document.querySelectorAll('footer').forEach(f => f.style.display = 'none');
 </script>
 
 

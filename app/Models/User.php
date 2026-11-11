@@ -101,4 +101,13 @@ class User extends Authenticatable
         // Avatar default jika tidak ada foto
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
+
+    /**
+     * Staf yang boleh melihat/membalas semua thread chat
+     * (1=Admin, 3=Verifikator, 4=Operator).
+     */
+    public function isStaff(): bool
+    {
+        return in_array($this->role_id, ChatMessage::STAFF_ROLES, true);
+    }
 }

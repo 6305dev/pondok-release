@@ -74,29 +74,10 @@
 @auth
 <span id="global-user-id" data-id="{{ Auth::id() }}" data-username="{{ Auth::user()->name }}" class="hidden"></span>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
     (function() {
-        const SOCKET_SERVER_URL = "{{ env('SOCKET_URL') }}";
         const userEl = document.getElementById('global-user-id');
         if (!userEl) return;
-
-        const userId = userEl.getAttribute('data-id');
-        const username = userEl.getAttribute('data-username');
-
-        // Connect socket
-        if (!window.globalUserSocket) {
-            window.globalUserSocket = io(SOCKET_SERVER_URL, {
-                transports: ["websocket", "polling"]
-            });
-            window.globalUserSocket.on('connect', () => {
-                window.globalUserSocket.emit('register', {
-                    id: userId,
-                    username: username,
-                    role: 'user'
-                });
-            });
-        }
 
         async function updateClientUnreadBadge() {
             try {
@@ -110,7 +91,11 @@
                     return;
                 }
 
-                const response = await fetch(`${SOCKET_SERVER_URL}/chat/messages/unread/user/${userId}`);
+                // Hemat request: lewati saat tab tidak aktif
+                if (document.hidden) return;
+
+                const response = await fetch('/chat-proxy/unread-count');
+                if (!response.ok) return;
                 const data = await response.json();
                 const count = parseInt(data.count || 0);
 
@@ -131,19 +116,10 @@
             }
         }
 
-        // Run on load
+        // Run on load, lalu polling berkala (chat internal tanpa realtime)
         document.addEventListener('DOMContentLoaded', () => {
             updateClientUnreadBadge();
-        });
-
-        // Listen for new messages
-        window.globalUserSocket.on('newMessageFromAdmin', () => {
-            updateClientUnreadBadge();
-        });
-        
-        // Listen when messages are marked read
-        window.globalUserSocket.on('messagesRead', () => {
-            updateClientUnreadBadge();
+            setInterval(updateClientUnreadBadge, 30000);
         });
     })();
 </script>
